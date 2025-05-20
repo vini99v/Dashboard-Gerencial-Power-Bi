@@ -1,0 +1,62 @@
+# Dashboard Gerencial para Tomada de Decisões com Power BI
+
+## Descrição
+
+Este projeto tem como objetivo a criação de um dashboard gerencial para análise de vendas, utilizando o Power BI. O dashboard apresenta KPIs importantes, análises por região, categoria e evolução temporal, facilitando a tomada de decisões estratégicas.
+
+---
+
+## Estrutura dos Dados
+
+O arquivo Excel contém três abas/tabelas principais:
+
+- **Vendas**: Registra as vendas realizadas, com informações de data, cliente, produto, quantidade, valores unitários e totais.
+- **Clientes**: Dados dos clientes, incluindo identificação, nome e região geográfica.
+- **Produtos**: Informações dos produtos, com identificação, nome e categoria.
+
+---
+
+## KPIs do Dashboard
+
+- Receita Total  
+- Quantidade Total Vendida  
+- Receita por Região  
+- Receita por Categoria  
+- Receita Mensal  
+- Ticket Médio por Venda  
+
+---
+
+## Instruções para Uso
+
+1. Abra o Power BI Desktop.  
+2. Clique em **Obter Dados** e selecione **Excel**.  
+3. Importe o arquivo `dashboard_gerencial_exemplo.xlsx` com as três abas: Vendas, Clientes e Produtos.  
+4. Vá até a aba **Modelagem** e crie os relacionamentos:  
+   - `Vendas[IDCliente]` para `Clientes[IDCliente]`  
+   - `Vendas[IDProduto]` para `Produtos[IDProduto]`  
+5. Crie as medidas DAX para os KPIs conforme exemplos abaixo:  
+
+```DAX
+-- Receita Total
+Receita Total = SUM(Vendas[ValorTotal])
+
+-- Quantidade Total Vendida
+Quantidade Total = SUM(Vendas[Quantidade])
+
+-- Receita Mensal (exemplo)
+Receita Mensal = 
+CALCULATE(
+    [Receita Total],
+    FILTER(
+        ALL('Vendas'[DataVenda]),
+        YEAR('Vendas'[DataVenda]) = YEAR(TODAY())
+    )
+)
+
+-- Ticket Médio por Venda
+Ticket Médio = 
+DIVIDE(
+    [Receita Total],
+    DISTINCTCOUNT(Vendas[IDVenda])
+)
